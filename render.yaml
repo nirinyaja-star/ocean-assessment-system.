@@ -1,0 +1,49 @@
+# Render Blueprint — deploys both projects together.
+# How to use: push this whole folder to a GitHub repo, then on Render:
+# New + -> Blueprint -> connect that repo. Render reads this file and
+# creates both services with the wiring below already set up — see
+# DEPLOY.md for the one manual step still needed (setting SEED_API_KEY's
+# real value is automatic via generateValue, nothing to do there either;
+# the one manual step is just approving the Blueprint and, optionally,
+# changing SEED_RECRUITER_EMAIL/NAME to your own).
+#
+# IMPORTANT caveat (stated here, not hidden): both services use node:sqlite
+# file storage with NO Render persistent Disk attached (Disks require a
+# paid plan). On the free plan, data is wiped on every restart/redeploy.
+# Fine for a first live test; see DEPLOY.md "Making data durable" before
+# relying on this for real candidates.
+
+services:
+  - type: web
+    name: assessment-processing
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./assessment-processing/Dockerfile
+    dockerContext: ./assessment-processing
+    envVars:
+      - key: SEED_API_KEY
+        generateValue: true
+      - key: SEED_RECRUITER_EMAIL
+        value: nirinya.Jarunsinjaru@agc.com
+      - key: SEED_RECRUITER_NAME
+        value: Nirinya
+
+  - type: web
+    name: candidate-assessment
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./candidate-assessment/Dockerfile
+    dockerContext: ./candidate-assessment
+    envVars:
+      - key: PROCESSING_API_KEY
+        fromService:
+          name: assessment-processing
+          type: web
+          envVarKey: SEED_API_KEY
+      - key: PROCESSING_HOSTPORT
+        fromService:
+          name: assessment-processing
+          type: web
+          property: hostport

@@ -1,0 +1,14 @@
+{
+  "name": "assessment-processing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Assessment processing, JD analysis & reporting backend + recruiter dashboard (plain Node.js — see docs/ARCHITECTURE_DECISION.md for why this isn't Next.js/Supabase).",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node bin/start.js",
+    "test": "node --test tests/*.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  }
+}

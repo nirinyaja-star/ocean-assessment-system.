@@ -1,0 +1,13 @@
+{
+  "name": "candidate-assessment",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Candidate-facing assessment UI & raw data export (plain Node.js — see docs/ARCHITECTURE_DECISION.md).",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node bin/start.js",
+    "build-questions": "node src/exportQuestions.js",
+    "test": "node --test tests/*.js"
+  },
+  "engines": { "node": ">=22.5.0" }
+}

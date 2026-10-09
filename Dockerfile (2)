@@ -1,0 +1,13 @@
+# See assessment-processing/Dockerfile for why this base image (Chromium +
+# deps, for the raw-answer PDF export in src/rawExport.js).
+FROM mcr.microsoft.com/playwright:v1.56.0-noble
+
+WORKDIR /app
+COPY package.json ./
+RUN npm install --omit=dev playwright@1.56.0 docx@9.7.1
+
+COPY . .
+
+ENV NODE_ENV=production
+EXPOSE 5000
+CMD ["node", "bin/start.js"]
